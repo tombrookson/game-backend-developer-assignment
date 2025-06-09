@@ -1,5 +1,5 @@
 import { wrapAsync, createRouter } from '../../../utils/index.js';
-import { getGames, getGameById, postGame, putGame } from '../../../apis/firestore/games.js';
+import { getGames, getGameById, postGame, putGame, deleteGame } from '../../../apis/firestore/games.js';
 import { HttpError } from '../../../classes/HttpError.js';
 import { gameValidator } from '../../../validators/game.js';
 import { Game } from '../../../models/game.js';
@@ -70,5 +70,16 @@ gamesRouter.put(
 
     const game = await putGame(id, gameData);
     return { message: 'Game updated', game };
+  }),
+)
+
+gamesRouter.delete(
+  '/:id',
+  wrapAsync(async (req) => {
+    const { id } = req.params;
+
+    await deleteGame(id);
+
+    return { message: 'Game deleted' };
   }),
 )

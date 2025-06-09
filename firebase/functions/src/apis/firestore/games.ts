@@ -71,3 +71,22 @@ export async function putGame(id: string, gameData: Omit<Game, 'id'>): Promise<G
     throw new HttpError('Error while updating game', 500);
   }
 }
+
+export async function deleteGame(id: string): Promise<void> {
+  try {
+    const docRef = getCollection().doc(id);
+    const existing = await docRef.get();
+
+    if (!existing.exists)
+      throw new HttpError(`Game not found to update with ID '${id}'`)
+
+    await docRef.delete();
+    return;
+  } catch (error) {
+    if (error instanceof HttpError) {
+      throw error;
+    }
+
+    throw new HttpError('Error while deleting game', 500);
+  }
+}
