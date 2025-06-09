@@ -11,8 +11,8 @@ services:
       FIRESTORE_EMULATOR_HOST: "localhost:8080"
       PUBSUB_EMULATOR_HOST: "localhost:8085"
       FUNCTIONS_EMULATOR_HOST: "localhost:5001"
-      FIREBASE_PROJECT: "test-project"
-      GCLOUD_PROJECT: "test-project"
+      FIREBASE_PROJECT: "demo-project"
+      GCLOUD_PROJECT: "demo-project"
       FORCE_COLOR: "true"
       DATA_DIRECTORY: "data"
       CHOKIDAR_USEPOLLING: "true"
@@ -27,6 +27,7 @@ services:
       - "9099:9100" # auth
       - "9199:9200" # Storage
       - "6000:6001" # Hosting
+      - "9081:9081"
     volumes:
       - ./firebase:/srv/firebase:rw
     #   - ./cache:/root/.cache/:rw

@@ -67,3 +67,7 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+# Compiled JavaScript files
+lib/**/*.js
+lib/**/*.js.map

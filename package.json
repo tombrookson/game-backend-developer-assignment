@@ -1,0 +1,17 @@
+{
+  "name": "@softgames/senior-backend-dev-assessment",
+  "scripts": {
+    "build": "tsc",
+    "buildImage": "docker compose up -d",
+    "seed": "ts-node infrastructure/scripts/seed-database.ts",
+    "start": "npm run dev --prefix=admin"
+  },
+  "private": true,
+  "dependencies": {
+    "firebase-admin": "^13.4.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
