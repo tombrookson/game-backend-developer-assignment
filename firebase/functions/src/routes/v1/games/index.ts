@@ -1,5 +1,5 @@
 import { wrapAsync, createRouter } from '../../../utils/index.js';
-import { getGames, getGameById, postGame } from '../../../apis/firestore/games.js';
+import { getGames, getGameById, postGame, putGame } from '../../../apis/firestore/games.js';
 import { HttpError } from '../../../classes/HttpError.js';
 import { gameValidator } from '../../../validators/game.js';
 import { Game } from '../../../models/game.js';
@@ -40,7 +40,7 @@ gamesRouter.post(
       gameData = gameValidator.parse(req.body) as Game;
     } catch (err) {
       if (err instanceof z.ZodError) {
-        const messages = err.issues.map(issue => issue.message).join(', ');
+        const messages = err.issues.map(issue => `${issue.code} - ${issue.message}`).join(', ');
         throw new HttpError(`Validation failed: ${messages}`, 400);
       }
       throw new HttpError('Unknown error during validation', 500);
@@ -50,3 +50,25 @@ gamesRouter.post(
     return { message: 'Game created', game };
   }),
 );
+
+gamesRouter.put(
+  '/:id',
+  wrapAsync(async (req) => {
+    const { id } = req.params;
+    let gameData: Omit<Game, 'id'>;
+
+    try {
+      const partialValidator = gameValidator.omit({ id: true });
+      gameData = partialValidator.parse(req.body) as Omit<Game, 'id'>;
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        const messages = err.issues.map(issue => `${issue.code} - ${issue.message}`).join(', ');
+        throw new HttpError(`Validation failed: ${messages}`, 400);
+      }
+      throw new HttpError('Unknown error during validation', 500);
+    }
+
+    const game = await putGame(id, gameData);
+    return { message: 'Game updated', game };
+  }),
+)

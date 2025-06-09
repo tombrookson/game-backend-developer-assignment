@@ -43,6 +43,31 @@ export async function postGame(gameData: Game): Promise<Game> {
 
     return gameData;
   } catch (error) {
+    if (error instanceof HttpError) {
+      throw error;
+    }
+
     throw new HttpError('Error while saving game', 500);
+  }
+}
+
+export async function putGame(id: string, gameData: Omit<Game, 'id'>): Promise<Game> {
+  try {
+    const docRef = getCollection().doc(id);
+    const existing = await docRef.get();
+
+    if (!existing.exists)
+      throw new HttpError(`Game not found to update with ID '${id}'`)
+
+    const newData: Game = { ...gameData, id };
+
+    await docRef.set(newData);
+    return newData;
+  } catch (error) {
+    if (error instanceof HttpError) {
+      throw error;
+    }
+
+    throw new HttpError('Error while updating game', 500);
   }
 }
