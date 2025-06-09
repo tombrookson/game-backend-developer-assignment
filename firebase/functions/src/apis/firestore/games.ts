@@ -57,7 +57,7 @@ export async function putGame(id: string, gameData: Omit<Game, 'id'>): Promise<G
     const existing = await docRef.get();
 
     if (!existing.exists)
-      throw new HttpError(`Game not found to update with ID '${id}'`)
+      throw new HttpError(`Game not found to update with ID '${id}'`, 404)
 
     const newData: Game = { ...gameData, id };
 
@@ -78,7 +78,7 @@ export async function deleteGame(id: string): Promise<void> {
     const existing = await docRef.get();
 
     if (!existing.exists)
-      throw new HttpError(`Game not found to update with ID '${id}'`)
+      throw new HttpError(`Game not found to update with ID '${id}'`, 404)
 
     await docRef.delete();
     return;
