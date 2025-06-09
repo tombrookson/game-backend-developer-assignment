@@ -17,15 +17,13 @@ gamesRouter.get(
   wrapAsync(async (req) => {
     const { id } = req.params;
 
-    if (!id) {
+    if (!id)
       throw new HttpError("An id must be provided in the request", 400);
-    }
 
     const game = await getGameById(id);
 
-    if (!game) {
+    if (!game)
       throw new HttpError(`Game with id '${id}' not found`, 404);
-    }
 
     return game;
   }),
@@ -55,6 +53,10 @@ gamesRouter.put(
   '/:id',
   wrapAsync(async (req) => {
     const { id } = req.params;
+
+    if (!id)
+      throw new HttpError("An id must be provided in the request", 400);
+
     let gameData: Omit<Game, 'id'>;
 
     try {
@@ -77,6 +79,9 @@ gamesRouter.delete(
   '/:id',
   wrapAsync(async (req) => {
     const { id } = req.params;
+
+    if (!id)
+      throw new HttpError("An id must be provided in the request", 400);
 
     await deleteGame(id);
 
