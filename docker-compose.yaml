@@ -30,6 +30,9 @@ services:
       - "9081:9081"
     volumes:
       - ./firebase:/srv/firebase:rw
-    #   - ./cache:/root/.cache/:rw
-    #   - ~/.config/:/root/.config
-    #   - ./data:/srv/firebase/data:rw
+      #   - ./cache:/root/.cache/:rw
+      #   - ~/.config/:/root/.config
+      - firebase_data:/srv/firebase/data
+
+volumes:
+  firebase_data:
