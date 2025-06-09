@@ -7,10 +7,12 @@ const getCollection = memoize(() =>
   getFirestore().collection('games'),
 );
 
-export async function getGames() {
+export async function getGames(): Promise<Game[]> {
   try {
     const result = await getCollection().get();
-    return result.docs.map((snap) => snap.data());
+    return result.docs.map((snap) => {
+      return snap.data() as Game;
+    });
   } catch (error) {
     throw new HttpError('Error while fetching games', 500);
   }
