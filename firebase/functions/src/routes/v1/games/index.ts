@@ -1,90 +1,75 @@
 import { wrapAsync, createRouter } from '../../../utils/index.js';
-import { getGames, getGameById, postGame, putGame, deleteGame } from '../../../apis/firestore/games.js';
-import { HttpError } from '../../../classes/HttpError.js';
-import { gameValidator } from '../../../validators/game.js';
-import { Game } from '../../../models/game.js';
-import { z } from 'zod';
+import { HttpError } from '../../../exceptions/HttpError.js';
+
+import { GamesRepository } from '../../../repositories/gamesRepository.js';
+import { GamesService } from '../../../services/gamesService.js';
+import { getFirestore } from '../../../apis/firestore/getFirestore.js';
+
+const firestore = getFirestore();
+
+const repo = new GamesRepository(firestore);
+const service = new GamesService(repo);
 
 export const gamesRouter = createRouter();
 
 gamesRouter.get(
-  '/',
-  wrapAsync(() => getGames()),
+    '/',
+    wrapAsync(() => service.getGames()),
 );
 
 gamesRouter.get(
-  '/:id',
-  wrapAsync(async (req) => {
-    const { id } = req.params;
+    '/:id',
+    wrapAsync(async (req) => {
+        const { id } = req.params;
 
-    if (!id)
-      throw new HttpError("An id must be provided in the request", 400);
+        if (!id) {
+            throw new HttpError("An id must be provided in the request", 400);
+        }
 
-    const game = await getGameById(id);
+        const game = await service.getGameById(id);
+        if (!game) {
+            throw new HttpError(`Game with id '${id}' not found`, 404);
+        }
 
-    if (!game)
-      throw new HttpError(`Game with id '${id}' not found`, 404);
-
-    return game;
-  }),
+        return game;
+    }),
 );
 
 gamesRouter.post(
-  '/',
-  wrapAsync(async (req) => {
-    let gameData: Game;
-
-    try {
-      gameData = gameValidator.parse(req.body) as Game;
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        const messages = err.issues.map(issue => `${issue.code} - ${issue.message}`).join(', ');
-        throw new HttpError(`Validation failed: ${messages}`, 400);
-      }
-      throw new HttpError('Unknown error during validation', 500);
-    }
-
-    const game = await postGame(gameData);
-    return { message: 'Game created', game };
-  }),
+    '/',
+    wrapAsync(async (req) => {
+        return {
+            message: 'Game created',
+            game: await service.createGame(req.body),
+        };
+    }),
 );
 
 gamesRouter.put(
-  '/:id',
-  wrapAsync(async (req) => {
-    const { id } = req.params;
+    '/:id',
+    wrapAsync(async (req) => {
+        const { id } = req.params;
+        if (!id) {
+            throw new HttpError("An id must be provided in the request", 400);
+        }
 
-    if (!id)
-      throw new HttpError("An id must be provided in the request", 400);
-
-    let gameData: Omit<Game, 'id'>;
-
-    try {
-      const partialValidator = gameValidator.omit({ id: true });
-      gameData = partialValidator.parse(req.body) as Omit<Game, 'id'>;
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        const messages = err.issues.map(issue => `${issue.code} - ${issue.message}`).join(', ');
-        throw new HttpError(`Validation failed: ${messages}`, 400);
-      }
-      throw new HttpError('Unknown error during validation', 500);
-    }
-
-    const game = await putGame(id, gameData);
-    return { message: 'Game updated', game };
-  }),
-)
+        return {
+            message: 'Game updated',
+            game: await service.updateGame(id, req.body),
+        };
+    }),
+);
 
 gamesRouter.delete(
-  '/:id',
-  wrapAsync(async (req) => {
-    const { id } = req.params;
+    '/:id',
+    wrapAsync(async (req) => {
+        const { id } = req.params;
 
-    if (!id)
-      throw new HttpError("An id must be provided in the request", 400);
+        if (!id) {
+            throw new HttpError("An id must be provided in the request", 400);
+        }
 
-    await deleteGame(id);
-
-    return { message: 'Game deleted' };
-  }),
-)
+        await service.deleteGame(id);
+        return { message: 'Game deleted' };
+    }),
+);
