@@ -11,10 +11,10 @@ export class GamesRepository {
 
     async getAll(): Promise<Game[]> {
         try {
-            const result = await this.collection.get();
-            return result.docs.map((snap) => {
-                return snap.data() as Game;
-            });
+            const snapshot = await this.collection.get();
+            const docs = snapshot.docs.sort((a, b) => Number(a.id) - Number(b.id));
+
+            return docs.map(doc => doc.data() as Game);
         } catch (error) {
             throw new Error(`Error while fetching games from Firestore: ${error}`);
         }
