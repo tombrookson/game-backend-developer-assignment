@@ -4,7 +4,7 @@ import { Game } from '../models/game';
 import type { FormProps } from 'antd';
 import { Button, Form, Input, InputNumber, Modal, Select, Alert } from 'antd';
 
-const CreateGame = () => {
+const CreateGame = ({ onGameCreated }: { onGameCreated: () => void }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formError, setFormError] = useState<string | null>(null);
     const [form] = Form.useForm();
@@ -46,6 +46,7 @@ const CreateGame = () => {
         try {
             await postGame(game);
             setIsModalOpen(false);
+            onGameCreated();
             setFormError(null);
         } catch (error: any) {
             console.log(error);
@@ -77,7 +78,10 @@ const CreateGame = () => {
                         <Input />
                     </Form.Item>
 
-                    <Form.Item name="releaseYear" label="Release Year" rules={[{ required: true, min: 1800 }]}>
+                    <Form.Item name="releaseYear" label="Release Year" rules={[
+                        { required: true, message: 'Release Year is required' },
+                        { type: 'number', min: 1800, message: 'Release year must be at least 1800' }
+                    ]}>
                         <InputNumber style={{ width: '100%' }} />
                     </Form.Item>
 

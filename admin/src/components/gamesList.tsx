@@ -3,7 +3,7 @@ import { getGames } from '../services/gamesService';
 import { Game } from '../models/game';
 import { Table } from 'antd';
 
-const GamesList = () => {
+const GamesList = ({ refreshKey }: { refreshKey: number }) => {
     const [apiData, setApiData] = useState<Game[] | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -19,12 +19,13 @@ const GamesList = () => {
         };
 
         fetchData();
-    }, []);
+    }, [refreshKey]);
 
     if (error) return <div>{error} </div>;
     if (!apiData) return <div>Loading...</div>;
 
     const tableColumns = [
+        { title: 'Id', dataIndex: 'id', key: 'id' },
         { title: 'Name', dataIndex: 'name', key: 'name' },
         { title: 'Year', dataIndex: 'releaseYear', key: 'releaseYear' },
         { title: 'Publisher', dataIndex: 'publisher', key: 'publisher' },
