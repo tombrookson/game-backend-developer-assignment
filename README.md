@@ -26,6 +26,10 @@ npm run buildImage
 
 View Emulator UI at http://127.0.0.1:4000/. This will setup the docker environment and start the full firebase emulator in the docker container.
 
+> [!WARNING]  
+> If you get a `exec /usr/bin/serve.sh: no such file or directory` error when the docker container tries to start, check the line endings for the `./infrastructure/scripts/serve.sh` file.
+> This issue can occur when the file is ending in CRLF and not LF. If it is CRLF, change to LF.
+
 Once the above has started, run:
 
 ```
@@ -38,6 +42,7 @@ This will seed the database with the data found in `data/games.json`. You can ed
 Last, run:
 
 ```
+npm i --prefix=admin
 npm run start
 ```
 
