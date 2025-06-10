@@ -3,6 +3,7 @@ import { getGames } from '../services/gamesService';
 import { Game } from '../models/game';
 import { Table, Space } from 'antd';
 import DeleteGame from './deleteGame';
+import UpdateGame from './updateGame';
 
 const GamesList = ({ refreshKey }: { refreshKey: number }) => {
     const [apiData, setApiData] = useState<Game[] | null>(null);
@@ -36,6 +37,11 @@ const GamesList = ({ refreshKey }: { refreshKey: number }) => {
             key: 'action',
             render: (_: string, record: Game) => (
                 <Space size="middle">
+                    <UpdateGame
+                        game={record}
+                        onGameUpdated={() => setRefreshList(prev => prev + 1)}
+                    />
+
                     <DeleteGame
                         game={record}
                         onDeleted={() => setRefreshList(prev => prev + 1)}

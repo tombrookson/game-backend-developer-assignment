@@ -31,7 +31,7 @@ const DeleteGame: React.FC<DeleteGameProps> = ({ game, onDeleted }) => {
 
     return (
         <>
-            <Button type="primary" onClick={showModal}>
+            <Button type="primary" danger onClick={showModal}>
                 Delete
             </Button>
             <Modal
