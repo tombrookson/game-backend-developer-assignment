@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { getGames } from '../services/gamesService';
 import { Game } from '../models/game';
-import { Table } from 'antd';
+import { Table, Space } from 'antd';
+import DeleteGame from './deleteGame';
 
 const GamesList = ({ refreshKey }: { refreshKey: number }) => {
     const [apiData, setApiData] = useState<Game[] | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [refreshList, setRefreshList] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -19,7 +21,7 @@ const GamesList = ({ refreshKey }: { refreshKey: number }) => {
         };
 
         fetchData();
-    }, [refreshKey]);
+    }, [refreshKey, refreshList]);
 
     if (error) return <div>{error} </div>;
     if (!apiData) return <div>Loading...</div>;
@@ -29,6 +31,18 @@ const GamesList = ({ refreshKey }: { refreshKey: number }) => {
         { title: 'Name', dataIndex: 'name', key: 'name' },
         { title: 'Year', dataIndex: 'releaseYear', key: 'releaseYear' },
         { title: 'Publisher', dataIndex: 'publisher', key: 'publisher' },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (_: string, record: Game) => (
+                <Space size="middle">
+                    <DeleteGame
+                        game={record}
+                        onDeleted={() => setRefreshList(prev => prev + 1)}
+                    />
+                </Space>
+            ),
+        },
     ]
 
     return (
