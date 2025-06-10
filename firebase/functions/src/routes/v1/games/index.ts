@@ -3,7 +3,7 @@ import { HttpError } from '../../../exceptions/HttpError.js';
 
 import { GamesRepository } from '../../../repositories/gamesRepository.js';
 import { GamesService } from '../../../services/gamesService.js';
-import { getFirestore } from '../../../apis/firestore/getFirestore.js';
+import { getFirestore } from '../../../apis/firebase.js';
 
 const firestore = getFirestore();
 
