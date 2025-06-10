@@ -36,7 +36,7 @@ const DeleteGame: React.FC<DeleteGameProps> = ({ game, onDeleted }) => {
             </Button>
             <Modal
                 title="Delete Game"
-                closable={{ 'aria-label': 'Close' }}
+                closable={{ 'aria-label': 'Close' }} // eslint-disable-line @typescript-eslint/naming-convention
                 open={isModalOpen}
                 onOk={handleDelete}
                 onCancel={handleCancel}

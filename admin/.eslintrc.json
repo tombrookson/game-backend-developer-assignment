@@ -1,15 +1,17 @@
 {
   "root": true,
   "env": { "browser": true, "es2020": true },
-  "extends": ["@softgames", "plugin:react-hooks/recommended"],
-  "plugins": ["react-refresh"],
+  "extends": ["plugin:react-hooks/recommended"],
+  "plugins": ["react-refresh", "@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaFeatures": { "jsx": true },
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.json",
+    "sourceType": "module"
   },
   "rules": {
     "react-refresh/only-export-components": [
-      // ToDo: What does this rule do?
+      // ToDo: What does this rule do? - It will give a warning, not an error, when something other than a react component is exported in a file.
+      // The second line allows for constants to be exported such as export const BASE_URL = "api_url"
       "warn",
       { "allowConstantExport": true }
     ],
@@ -44,10 +46,6 @@
       {
         "selector": "objectLiteralProperty",
         "format": ["camelCase"]
-      },
-      {
-        "selector": "import",
-        "format": ["camelCase", "PascalCase"]
       },
       {
         "selector": "classProperty",

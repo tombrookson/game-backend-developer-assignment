@@ -22,7 +22,7 @@ export const postGame = async (game: Game): Promise<Game> => {
     const response = await fetch(`${BASE_URL}/games`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json", // eslint-disable-line @typescript-eslint/naming-convention
         },
         body: JSON.stringify(game),
     });
@@ -39,7 +39,7 @@ export const putGame = async (id: string, game: Omit<Game, "id">): Promise<Game>
     const response = await fetch(`${BASE_URL}/games/${id}`, {
         method: "PUT",
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json", // eslint-disable-line @typescript-eslint/naming-convention
         },
         body: JSON.stringify(game),
     });
