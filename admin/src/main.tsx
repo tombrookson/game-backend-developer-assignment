@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Layout } from "antd";
 import GamesList from "./components/gamesList";
+import CreateGame from "./components/createGame";
 
 const root = document.getElementById("root");
 if (!root) {
@@ -15,6 +16,7 @@ ReactDOM.createRoot(root).render(
         <Layout>
             <Header style={{ color: "white", fontSize: "20px" }}>Admin</Header>
             <Content>
+                <CreateGame />
                 <GamesList />
             </Content>
         </Layout>
