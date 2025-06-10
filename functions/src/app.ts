@@ -1,7 +1,7 @@
 import express, { type Express } from 'express';
 import morgan from 'morgan';
 import router from './routes/index.js';
-import { notFoundMiddleware, errorMiddleware } from './middleware';
+import { notFoundMiddleware, errorMiddleware } from './middleware/index.js';
 
 export const app: Express = express();
 
